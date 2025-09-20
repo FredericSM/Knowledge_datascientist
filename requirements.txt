@@ -1,0 +1,7 @@
+# To install the required package, run:
+# pip install -r requirements.txt
+
+numpy
+fastapi
+uvicorn
+streamlit
