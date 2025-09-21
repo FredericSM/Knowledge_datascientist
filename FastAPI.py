@@ -8,12 +8,14 @@ import math
 import io
 import csv
 
+
 # --------- Minimal "ML model" you can replace later ----------
 class ToyModel:
     """
     A tiny deterministic model: y = a*x1 + b*x2 + bias, with a,b,bias fixed.
     Replace with your own sklearn/torch model (load from disk) later.
     """
+
     def __init__(self, a: float = 0.7, b: float = 0.3, bias: float = 0.5):
         self.a = a
         self.b = b
@@ -32,6 +34,7 @@ class ToyModel:
             out.append(self.predict_one(row[0], row[1]))
         return out
 
+
 model = ToyModel()
 
 # --------- FastAPI app ----------
@@ -46,38 +49,47 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 # --------- Schemas ----------
 class PredictIn(BaseModel):
     x1: float = Field(..., description="Feature 1")
     x2: float = Field(..., description="Feature 2")
 
+
 class PredictOut(BaseModel):
     prediction: float
+
 
 class BatchPredictIn(BaseModel):
     rows: List[List[float]] = Field(..., description="Rows of features [[x1, x2], ...]")
 
+
 class BatchPredictOut(BaseModel):
     predictions: List[float]
+
 
 # --------- Routes ----------
 @app.get("/", tags=["meta"])
 def home():
     return {"message": "Salut, monde! 👋 Welcome to your FastAPI DS playground."}
 
+
 @app.get("/health", tags=["meta"])
 def health():
     return {"status": "ok"}
+
 
 @app.get("/metrics", tags=["meta"])
 def metrics():
     # toy metrics you can expand (e.g., counters, latencies)
     return {"model": "ToyModel", "version": "0.1.0", "features_required": 2}
 
+
 @app.post("/predict", response_model=PredictOut, tags=["inference"])
 def predict(payload: PredictIn):
     y = model.predict_one(payload.x1, payload.x2)
     return {"prediction": y}
+
 
 @app.post("/predict-batch", response_model=BatchPredictOut, tags=["inference"])
 def predict_batch(payload: BatchPredictIn):
@@ -87,6 +99,7 @@ def predict_batch(payload: BatchPredictIn):
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+
 def _train_job(log_id: str):
     # Simulate training: here you’d load data, fit sklearn model, save artifact, etc.
     # For demo, we just "update" parameters.
@@ -94,10 +107,12 @@ def _train_job(log_id: str):
     model.b *= 0.99
     # You could write logs to a file named by log_id.
 
+
 @app.post("/train", tags=["ops"])
 def kick_off_training(background_tasks: BackgroundTasks, log_id: Optional[str] = None):
     background_tasks.add_task(_train_job, log_id or "train-log")
     return {"status": "training-started", "log_id": log_id or "train-log"}
+
 
 # --------- Simple error example (for testing) ----------
 @app.get("/boom", tags=["debug"])
