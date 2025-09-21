@@ -14,7 +14,7 @@ Expresso,2
 Tea,3
 """
 
-beverages=pd.read_csv(io.StringIO(CSV))
+beverages = pd.read_csv(io.StringIO(CSV))
 
 CSV2 = """
 food_item, food_price
