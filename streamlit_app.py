@@ -1,22 +1,20 @@
 # pylint: disable=missing-module-docstring
-
+import io
 
 import streamlit as st
 import pandas as pd
 import duckdb
 
-import io
-
 # streamlit run Streamlit_test.py
 
-csv = """
+CSV = """
 beverage,price
 orange juice,2.5
 Expresso,2
 Tea,3
 """
 
-beverages = pd.read_csv(io.StringIO(csv))
+beverages = pd.read_csv(io.StringIO(CSV))
 
 CSV2 = """
 food_item, food_price
