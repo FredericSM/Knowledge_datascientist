@@ -1,6 +1,7 @@
 # pylint: disable=missing-module-docstring
 import ast
 import io
+import os
 
 import duckdb
 import pandas as pd
@@ -15,6 +16,11 @@ SELECT * FROM beverages
 CROSS JOIN food_items
 """
 
+if "data" not in os.listdir():
+    os.mkdir("data")
+
+if "exercices_sql_tables.duckdb" not in os.listdir("data"):
+    exec(open("init_db.py").read())
 
 st.write(
     """
@@ -33,7 +39,9 @@ with st.sidebar:
 
     st.write("You selected:", theme)
 
-    exercice = con.execute(f"SELECT * FROM memory_state WHERE theme='{theme}'").df()
+    exercice = con.execute(f"SELECT * FROM memory_state WHERE theme='{theme}'").df().sort_values(
+        by="last_reveiwed"
+    ).reset_index()
     st.write(exercice)
 
     exercise_name = exercice.loc[0, "exercise_name"]
@@ -64,7 +72,7 @@ if query:
 tab1, tab2 = st.tabs(["Tables", "solution"])
 
 with tab1:
-    exercice_tables = ast.literal_eval(exercice.loc[0, "tables"])
+    exercice_tables = exercice.loc[0, "tables"]
     for table in exercice_tables:
         st.write(f"table: {table}")
         df_table = con.execute(f"SELECT * FROM {table}").df()
