@@ -30,15 +30,18 @@ st.write(
 )
 
 with st.sidebar:
+    available_themes_df = con.execute('SELECT DISTINCT theme FROM memory_state').df()
     theme = st.selectbox(
         "What woul you like to learn?",
-        ("cross_joins", "GroupBy", "window_functions"),
+        available_themes_df["theme"].unique(),
         index=None,
         placeholder="Select a topic",
     )
 
     st.write("You selected:", theme)
 
+    if not theme:
+        theme = "cross_joins"
     exercice = (
         con.execute(f"SELECT * FROM memory_state WHERE theme='{theme}'")
         .df()
