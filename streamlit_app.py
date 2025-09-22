@@ -1,38 +1,28 @@
 # pylint: disable=missing-module-docstring
 
-
-import streamlit as st
-import pandas as pd
-import duckdb
-
+import ast
 import io
+import os
+
+import duckdb
+import pandas as pd
+import streamlit as st
 
 # streamlit run Streamlit_test.py
 
-csv = """
-beverage,price
-orange juice,2.5
-Expresso,2
-Tea,3
-"""
+con = duckdb.connect(database="data/exercices_sql_tables.duckdb", read_only=False)
 
-beverages = pd.read_csv(io.StringIO(csv))
-
-CSV2 = """
-food_item, food_price
-cookie juice,2.5
-chocolatine,2
-muffin,3
-"""
-
-food_items = pd.read_csv(io.StringIO(CSV2))
 
 ANSWER_STR = """
 SELECT * FROM beverages
 CROSS JOIN food_items
 """
 
-solution_df = duckdb.sql(ANSWER_STR).df()
+if "data" not in os.listdir():
+    os.mkdir("data")
+
+if "exercices_sql_tables.duckdb" not in os.listdir("data"):
+    exec(open("init_db.py").read())
 
 st.write(
     """
@@ -42,19 +32,30 @@ st.write(
 )
 
 with st.sidebar:
-    option = st.selectbox(
+    theme = st.selectbox(
         "What woul you like to learn?",
-        ("Joins", "GroupBy", "Windows Functions"),
+        ("cross_joins", "GroupBy", "window_functions"),
         index=None,
         placeholder="Select a topic",
     )
 
-    st.write("You selected:", option)
+    st.write("You selected:", theme)
+
+    exercice = con.execute(f"SELECT * FROM memory_state WHERE theme='{theme}'").df().sort_values(
+        by="last_reveiwed"
+    ).reset_index()
+    st.write(exercice)
+
+    exercise_name = exercice.loc[0, "exercise_name"]
+    with open(f"answer/{exercise_name}.sql", "r") as file:
+        answer = file.read()
+
+    solution_df = con.execute(answer).df()
 
 st.header("Enter your code:")
 query = st.text_area(label="your SQL query", key="user_input")
 if query:
-    result = duckdb.sql(query).df()
+    result = con.execute(query).df()
     st.dataframe(result)
 
     try:
@@ -70,15 +71,14 @@ if query:
         )
 
 
-tab1, tab2 = st.tabs(["Tables", "solution_df"])
+tab1, tab2 = st.tabs(["Tables", "solution"])
 
 with tab1:
-    st.write("table: beverages")
-    st.dataframe(beverages)
-    st.write("table: food_items")
-    st.dataframe(food_items)
-    st.write("expected:")
-    st.dataframe(solution_df)
+    exercice_tables = exercice.loc[0, "tables"]
+    for table in exercice_tables:
+        st.write(f"table: {table}")
+        df_table = con.execute(f"SELECT * FROM {table}").df()
+        st.dataframe(df_table)
 
 with tab2:
-    st.write(ANSWER_STR)
+    st.write(answer)

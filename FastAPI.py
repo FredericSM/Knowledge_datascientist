@@ -1,12 +1,14 @@
 # app.py
 from __future__ import annotations
-from fastapi import FastAPI, BackgroundTasks, UploadFile, File, HTTPException
+
+import csv
+import io
+import math
+from typing import List, Optional
+
+from fastapi import BackgroundTasks, FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
-from typing import List, Optional
-import math
-import io
-import csv
 
 
 # --------- Minimal "ML model" you can replace later ----------
