@@ -39,9 +39,12 @@ with st.sidebar:
 
     st.write("You selected:", theme)
 
-    exercice = con.execute(f"SELECT * FROM memory_state WHERE theme='{theme}'").df().sort_values(
-        by="last_reveiwed"
-    ).reset_index()
+    exercice = (
+        con.execute(f"SELECT * FROM memory_state WHERE theme='{theme}'")
+        .df()
+        .sort_values(by="last_reveiwed")
+        .reset_index()
+    )
     st.write(exercice)
 
     exercise_name = exercice.loc[0, "exercise_name"]
