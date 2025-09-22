@@ -1,4 +1,5 @@
 # pylint: disable=missing-module-docstring
+
 import ast
 import io
 import os
@@ -10,6 +11,7 @@ import streamlit as st
 # streamlit run Streamlit_test.py
 
 con = duckdb.connect(database="data/exercices_sql_tables.duckdb", read_only=False)
+
 
 ANSWER_STR = """
 SELECT * FROM beverages
