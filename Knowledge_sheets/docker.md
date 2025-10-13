@@ -49,3 +49,43 @@ Options:
   docker container diff test (A: nouveau, C:modifié)
 
   docker system prune
+
+  ARG env(=default_value)
+  docker build --build-arg env=prod
+  ENV CLE1="Une valeur1"
+  ENV CLE2="Une valeur2"
+  LABEL version="2.3.1"
+  LABEL auteur="jean@gmail.com"
+  docker image inspect
+
+  docker container commit --help (créé une image depuis un container, peu utilisé)
+  docker image history container_name
+  docker image tag container_name:tag_name container_name:new_tag
+
+  docker container (-f) logs container_id/name
+
+  repertoire: contient toutes les versions d'une image
+
+  docker image pull/push <username>/<repertoire>:[tag]
+
+  docker login
+  docker build -t name/folder destination_folder
+
+  docker logout
+  sudo apt install pass
+  gpg2 --gen-key
+  wget https://github.com/docker/docker-credential-helpers/releases/download/v0.6.3/docker-credential-pass-v0.6.3-amd64.tar.gz && tar -xf docker-credential-pass-v0.6.3-amd64.tar.gz && chmod +x docker-credential-pass && sudo mv docker-credential-pass /usr/local/bin/
+  pass init "VOTRE NOM
+  nano ~/.docker/config.json
+  {
+    "credsStore": "pass"
+  }
+  docker login
+
+  docker image save -o mesimages.tar image1 image2
+  docker image load < mesimages.tar
+
+  docker container export -o moncontainer.tar container_id
+  docker image import moncontainer.tar image_name
+  --> perd les layers de l'image
+  
