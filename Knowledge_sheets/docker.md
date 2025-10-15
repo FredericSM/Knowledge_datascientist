@@ -88,4 +88,15 @@ Options:
   docker container export -o moncontainer.tar container_id
   docker image import moncontainer.tar image_name
   --> perd les layers de l'image
+
+  Mise en place du Dockerfile
+  Dans le Dockerfile nous mettons pour le moment :
   
+  FROM node:alpine
+  WORKDIR /app
+  COPY . .
+  RUN npm install
+  CMD [ "node", "/app/app.js" ]
+  EXPOSE 80
+
+  docker run -it -p 80:80 test
