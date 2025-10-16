@@ -100,3 +100,22 @@ Options:
   EXPOSE 80
 
   docker run -it -p 80:80 test
+
+  ctrl + R: match avec ce qui a déjà été fait
+  pour optimiser le rebuilt, ne pas hésiter à copier les dépendances avant le reste quite à faire deux fois copy
+  .dockerignore
+
+  hello.txt
+  */hello.txt
+  **/hello.txt
+  hel*
+  *.csv
+
+  docker run -d -p 80:70 myapp
+  docker exec -it conainer_id sh
+  docker attach container_id
+
+  docker container stats container_id
+  <img width="501" height="255" alt="image1" src="https://github.com/user-attachments/assets/e1229c29-1342-4bbc-ab45-bace5cde464d" />
+  <img width="501" height="255" alt="image" src="https://github.com/user-attachments/assets/aa872732-b12d-4c14-9eca-e5ecf9397ece" />
+
