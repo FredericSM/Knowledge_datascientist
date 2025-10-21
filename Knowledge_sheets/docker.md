@@ -116,6 +116,22 @@ Options:
   docker attach container_id
 
   docker container stats container_id
-  <img width="501" height="255" alt="image1" src="https://github.com/user-attachments/assets/e1229c29-1342-4bbc-ab45-bace5cde464d" />
+
+  probleme de persistence: volumes, bind mounts & tmpfs
   <img width="501" height="255" alt="image" src="https://github.com/user-attachments/assets/aa872732-b12d-4c14-9eca-e5ecf9397ece" />
 
+  docker container run -it --name alpine1 --mount type=bind,source="$(pwd)",target=/data alpine sh
+  --> très utile pour le mode développement
+  adaptation car ca ecrase les fichiers:
+  Pour commencer créons un dossier src et déplaçons y le fichier app.js.
+  FROM node:alpine
+  WORKDIR /app
+  COPY ./package.json .
+  RUN npm install
+  COPY . .
+  CMD ["node", "--watch", "src/app.js"]
+  docker run -p 80:80 --mount type=bind,source="$(pwd)/src",target=/app/src myapp
+  comprendre pourquoi ca supprime les fichiers et pourquoi src permet d'éviter le problème
+
+  docker volume create
+  docker volume inspect ID_NOM
