@@ -135,3 +135,12 @@ Options:
 
   docker volume create
   docker volume inspect ID_NOM
+
+  docker container run -d --name mongodb mongo
+  docker container logs mongodb
+  docker container exec -it mongodb mongosh
+  docker container run -d --name mongodb --mount source=mydb,target=/data/db mongo
+  MongoDB compass
+  docker container run -d --name mongodb --mount source=mydb,target=/data/db -p 27017:27017 mongo
+
+  docker run --name tmp --mount type=tmpfs,target=/data -it alpine sh
