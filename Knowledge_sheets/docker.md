@@ -144,3 +144,15 @@ Options:
   docker container run -d --name mongodb --mount source=mydb,target=/data/db -p 27017:27017 mongo
 
   docker run --name tmp --mount type=tmpfs,target=/data -it alpine sh
+
+  driver bridge/ host / overlay
+  docker network inspect
+  ping 172.17.0.3
+  docker container run  --name alpine2 --link alpine1 -it alpine sh
+  ping alpine2
+
+  docker network create mynet
+  docker container run --network mynet --name alpine1 -d alpine ping google.fr
+  docker network inspect bridge
+  docker exec -it alpine1 ping alpine2
+  reseau bridge par default ne doit pas etre utilisé mais un nouveau doit etre créé pour une meilleur isolation et une réoslution dns automatique entre les conteneurs
