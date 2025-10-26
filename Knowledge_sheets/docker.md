@@ -119,3 +119,20 @@ Options:
   <img width="501" height="255" alt="image1" src="https://github.com/user-attachments/assets/e1229c29-1342-4bbc-ab45-bace5cde464d" />
   <img width="501" height="255" alt="image" src="https://github.com/user-attachments/assets/aa872732-b12d-4c14-9eca-e5ecf9397ece" />
 
+  docker volume create data
+  docker container run -it --rm --mount source=data,target=/data alpine sh
+  docker container run -it --rm --mount source=data,target=/data alpine sh
+
+  docker volume prune
+docker volume create data
+docker container run -d --name conteneur1 --mount source=data,target=/data nginx
+docker container run -it --rm --volumes-from conteneur1 alpine sh
+echo 123 > /data/test.txt
+ls
+
+docker container run --rm --volumes-from conteneur1 --mount type=bind,src="$(pwd)",target=/backup alpine tar -cf /backup/backup.tar /data
+
+docker container run --rm --mount source=data,target=/data --mount type=bind,source="$(pwd)",target=/backup -it alpine tar -czf /backup/backup.tar.gz /data
+
+docker container run -it --rm --mount source=restore,target=/data alpine sh
+
