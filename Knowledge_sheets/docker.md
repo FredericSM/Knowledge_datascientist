@@ -156,3 +156,33 @@ Options:
   docker network inspect bridge
   docker exec -it alpine1 ping alpine2
   reseau bridge par default ne doit pas etre utilisé mais un nouveau doit etre créé pour une meilleur isolation et une réoslution dns automatique entre les conteneurs
+
+
+  docker compose
+  difference avec CLI et docker daemon, docker engine, docker desktop
+  docker compose version
+
+  docker compose up
+  docker compose run myalpine
+  docker compose down
+  docker compose down -v
+  docker compose run SERVICE (pas de problème de port ?)
+
+  services:
+myalpine:
+  image: alpine
+  command: ls / entrypoint: ls
+  docker compose ps
+
+  services:
+  a:
+    image: alpine
+    command: ['ls']
+  b:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      args:
+        - FOLDER=test
+      labels:
+        - email=jean@gmail.com
