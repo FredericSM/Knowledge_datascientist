@@ -186,3 +186,158 @@ myalpine:
         - FOLDER=test
       labels:
         - email=jean@gmail.com
+
+
+ports:
+  - "80:80"
+  - "8080:3000/udp"
+services:
+a:
+  image: alpine
+  command: ['ls']
+b:
+  build:
+    context: ./backend
+    dockerfile: Dockerfile
+    args:
+      - FOLDER=test
+    labels:
+      - email=jean@gmail.com
+  volumes:
+    - type: bind
+      source: ./data
+      target: /app/data
+volumes anonymes
+services:
+a:
+  image: alpine
+  command: ['ls']
+b:
+  build:
+    context: ./backend
+    dockerfile: Dockerfile
+    args:
+      - FOLDER=test
+    labels:
+      - email=jean@gmail.com
+  volumes:
+    - type: bind
+      source: ./data
+      target: /app/data
+    - type: volume
+      target: /app/data2
+volumes déjà nommés:
+volumes:
+  data3:
+volumes nommées déjà créés: 
+volumes:
+  data3:
+    external: true
+
+variables d'environnement
+backend:
+  image: "node-app:${NODE_APP_VERSION}"
+
+backend:
+  environment:
+    - NODE_APP_VERSION=2.2.3
+
+Utiliser un fichier externe avec env_file et .env
+NODE_APP_VERSION=2.2.3
+NODE_ENV=dev
+DEBUG=1
+
+backend:
+  env_file:
+    - config/env.dev
+
+COMPOSE_PROJECT_NAME=monprojet
+
+Définir la valeur des variables d'environnement avec Docker CLI
+docker compose run -e USER=paul up
+docker compose run -e USER up
+
+L'ordre de priorité
+1 - Le fichier docker-compose.yml.
+
+2 - Les variables d'environnement de votre shell.
+
+3 - Le fichier des variables d'environnement défini, par exemple .env.dev.
+
+4 - Le fichier Dockerfile (si vous avez défini des valeurs dans des instructions ENV).
+
+S'il ne trouve pas la valeur de la variable à tous ces endroits, et dans cet ordre, la variable sera non définie.
+
+Création d'un réseau par défaut
+services:
+  api:
+    image: node
+  db:
+    image: mongo:7
+
+Utiliser des alias avec --link
+services:
+  api:
+    image: node
+  db:
+    image: mongo:7
+    links:
+      - 'db:database'
+      - 'db:mongo'
+      
+Créer d'autres réseaux
+services:
+  proxy:
+    image: nginx
+    networks:
+      - frontend
+  app:
+    image: nginx
+    networks:
+      - frontend
+      - backend
+  api:
+    image: node
+    networks:
+      - backend
+  db:
+    image: mongo:7
+    networks:
+      - backend
+networks:
+  frontend:
+  backend:
+
+Changer le nom du réseau par défaut
+services:
+  api:
+    image: node
+  db:
+    image: mongo:7
+networks:
+  default:
+    name: monreseau
+
+services:
+  proxy:
+    image: nginx
+    networks:
+      - frontend
+  app:
+    image: nginx
+    networks:
+      - frontend
+      - backend
+  api:
+    image: node
+    networks:
+      - backend
+  db:
+    image: mongo:7
+    networks:
+      - backend
+networks:
+  frontend:
+    name: frontend
+  backend:
+    name: backend
