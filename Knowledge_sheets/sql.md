@@ -537,7 +537,7 @@ FROM sales;
 
 ---
 
-### 6.3 `LAG()` — Previous row value
+### 6.3.1 `LAG()` — Previous row value
 
 ```sql
 SELECT region,
@@ -560,6 +560,72 @@ FROM sales;
 
 
 ---
+
+### 6.3.2 LEAD() — Next row’s value
+
+`LEAD()` is the opposite of `LAG()`:  
+it allows you to look **forward** to the next row in the window.
+
+It does **not** collapse rows (since it's a window function).
+
+#### Example
+
+```sql
+SELECT region,
+       amount,
+       LEAD(amount) OVER (ORDER BY amount) AS next_amount
+FROM sales;
+```
+
+**Explanation:**
+
+- Rows are ordered by `amount` ascending.
+- `LEAD(amount)` returns the value of the **next** row.
+- If there is no next row → returns `NULL`.
+
+Using the `sales` table:
+
+| region | amount | year |
+|--------|--------|------|
+| West   | 200    | 2023 |
+| West   | 300    | 2024 |
+| East   | 500    | 2023 |
+
+#### Result:
+
+| region | amount | next_amount |
+|--------|--------|-------------|
+| West   | 200    | 300         |
+| West   | 300    | 500         |
+| East   | 500    | NULL        |
+
+
+#### Optional: specify a default value
+
+```sql
+LEAD(amount, 1, 0) OVER (ORDER BY amount)
+```
+
+- `1` → look 1 row ahead  
+- `0` → replace NULL with 0  
+
+#### Example with default:
+
+```sql
+SELECT region,
+       amount,
+       LEAD(amount, 1, 0) OVER (ORDER BY amount) AS next_amount
+FROM sales;
+```
+
+**Result:**
+
+| region | amount | next_amount |
+|--------|--------|-------------|
+| West   | 200    | 300         |
+| West   | 300    | 500         |
+| East   | 500    | 0           |
+
 
 ### 6.4 `ROW_NUMBER()` — Unique index per row
 
