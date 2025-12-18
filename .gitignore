@@ -1,4 +1,1 @@
-dsvenv/
-.dsvenv/
-*.csv
-test_db.py
+*_TBF.md
