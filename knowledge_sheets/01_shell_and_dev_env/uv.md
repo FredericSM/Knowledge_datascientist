@@ -133,4 +133,19 @@ Also supports dev requirements:
 uv add --group dev -r requirements-dev.txt
 ```
 
+### uv pip install -e . (Editable Install)
+```bash
+uv pip install -e .
+```
+
+	•	Installs your project in development mode
+	•	Makes your package (e.g. app/ in src/) importable everywhere
+	•	Uses live source code (no copy)
+	•	Required when using the src/ layout
+
+✅ Code changes apply immediately  
+❌ No PYTHONPATH hacks needed
+
+Run once per project.
+
 

@@ -1,14 +1,5 @@
 # Machine Learning Scalers – Practical Cheat Sheet
 
-This document provides a **clear, reusable reference** on the most important **data scaling and normalization techniques** every data scientist should master.
-It is written to be:
-
-* Interview-ready
-* Production-aware
-* Copy‑paste friendly for GitHub
-
----
-
 ## What is Scaling and Why It Matters
 
 **Scaling** is the process of transforming numerical features so that they lie on comparable scales.
